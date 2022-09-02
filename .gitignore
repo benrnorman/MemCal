@@ -48,3 +48,8 @@ Thumbs.db
 *.mov
 *.wmv
 
+# VS folders and files
+.vs/
+.vscode/
+bin/
+obj/
