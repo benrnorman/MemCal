@@ -1,9 +1,53 @@
-<Application
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    x:Class="MemCal.App"
->
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="MemCal.App">
+    <Application.Resources>
+        <SolidColorBrush x:Key="TextColour" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="BorderColour" Color="#525055" />
+        <SolidColorBrush x:Key="OutputBgColour" Color="#514F54" />
+        <SolidColorBrush x:Key="BtnActionBgColour" Color="#626065" />
+        <SolidColorBrush x:Key="BtnInputBgColour" Color="#7C7A7E" />
+        <SolidColorBrush x:Key="BtnOperatorBgColour" Color="#F2A33C" />
+    </Application.Resources>
     <Application.Styles>
         <FluentTheme Mode="Light"/>
+
+        <StyleInclude Source="avares://Material.Icons.Avalonia/App.xaml"></StyleInclude>
+        
+        <Style Selector="Label.LabelBase">
+            <Setter Property="Background" Value="{StaticResource ResourceKey=OutputBgColour}" />
+            <Setter Property="Foreground" Value="{StaticResource ResourceKey=TextColour}" />
+            <Setter Property="FontFamily" Value="Helvetica,Arial" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Bottom" />
+        </Style>
+        
+        <Style Selector="Label.LabelResult">
+            <Setter Property="FontSize" Value="40" />
+        </Style>
+
+        <Style Selector="Button.BtnBase">
+            <Setter Property="Background" Value="{StaticResource ResourceKey=BtnInputBgColour}" />
+            <Setter Property="Foreground" Value="{StaticResource ResourceKey=TextColour}" />
+            <Setter Property="BorderBrush" Value="{StaticResource ResourceKey=BorderColour}"></Setter>
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontFamily" Value="Helvetica,Arial" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        
+        <Style Selector="Button.BtnAction">
+            <Setter Property="Background" Value="{StaticResource ResourceKey=BtnActionBgColour}" />
+        </Style>
+        
+        <Style Selector="Button.BtnOperator">
+            <Setter Property="Background" Value="{StaticResource ResourceKey=BtnOperatorBgColour}" />
+        </Style>
     </Application.Styles>
 </Application>
