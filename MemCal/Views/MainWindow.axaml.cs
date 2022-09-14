@@ -22,6 +22,8 @@ public partial class MainWindow : Window
 
     private bool decimalInputFlag = false;
 
+    private bool evaluted = false;
+
     private bool negativeValueFlag = false;
 
 
@@ -84,6 +86,7 @@ public partial class MainWindow : Window
     private void ActionClearClick(object? sender, RoutedEventArgs e)
     {
         this.Reset();
+        this.PostClickAction();
     }
 
     /// <summary>
@@ -94,6 +97,8 @@ public partial class MainWindow : Window
     private void ActionNegateClick(object? sender, RoutedEventArgs e)
     {
         this.CurrentNumber *= -1;
+        this.UpdateResultOutput(this.CurrentNumber.ToString());
+        this.PostClickAction();
     }
 
     /// <summary>
@@ -109,6 +114,7 @@ public partial class MainWindow : Window
         }
 
         this.AfterCommit();
+        this.PostClickAction();
     }
 
     /// <summary>
@@ -119,8 +125,7 @@ public partial class MainWindow : Window
         this.CurrentNumber = 0;
         this.decimalInputFlag = false;
         this.negativeValueFlag = false;
-        this.UpdateResult(string.Empty);
-        this.UpdateHistory();
+        this.UpdateResultOutput(string.Empty);
     }
 
     /// <summary>
@@ -128,28 +133,26 @@ public partial class MainWindow : Window
     /// </summary>
     private void Calculate()
     {
-        this.CommitNumber();
-        Debug.WriteLine(this.Expression);
-        if (this.Expression != string.Empty)
+        if (!this.evaluted)
         {
-            try
+            this.CommitNumber();
+            Debug.WriteLine(this.Expression);
+            if (this.Expression != string.Empty)
             {
-                string? result = this.dt.Compute(this.Expression, null).ToString();
-                if (result != null)
+                string? result = string.Empty;
+                try
                 {
-                    this.UpdateResult(result);
+                    result = this.dt.Compute(this.Expression, null).ToString();
+                    result = result == null ? string.Empty : result;
                 }
-                else
+                catch
                 {
-                    this.UpdateResult(string.Empty);
+                    result = "NaN";
                 }
 
-                this.UpdateHistory();
-            }
-            catch
-            {
-                this.Reset();
-                this.UpdateResult("NaN");
+                this.evaluted = true;
+                this.Expression += " =";
+                this.UpdateResultOutput(result);
             }
         }
     }
@@ -162,6 +165,7 @@ public partial class MainWindow : Window
     private void CalculateClick(object? sender, RoutedEventArgs e)
     {
         this.Calculate();
+        this.PostClickAction();
     }
 
     /// <summary>
@@ -191,6 +195,7 @@ public partial class MainWindow : Window
     private void InputDecimalClick(object? sender, RoutedEventArgs e)
     {
         this.ResolveDecimalInput();
+        this.PostClickAction();
     }
 
     /// <summary>
@@ -205,6 +210,7 @@ public partial class MainWindow : Window
             Button inputBtn = (Button)sender;
             this.ResolveNumberlInput(inputBtn.Content.ToString());
         }
+        this.PostClickAction();
     }
 
     /// <summary>
@@ -273,6 +279,27 @@ public partial class MainWindow : Window
             Button inputBtn = (Button)sender;
             this.ResolveOperator(inputBtn.Content.ToString());
         }
+
+        this.PostClickAction();
+    }
+
+    /// <summary>
+    /// After clicking an input, reset focus.
+    /// </summary>
+    private void PostClickAction()
+    {
+        this.Result.Focus();
+    }
+
+    /// <summary>
+    /// Actions to run prior resolving any input.
+    /// </summary>
+    private void PreResolve()
+    {
+        if (this.evaluted)
+        {
+            this.Reset();
+        }
     }
 
     /// <summary>
@@ -280,6 +307,8 @@ public partial class MainWindow : Window
     /// </summary>
     private void Reset()
     {
+        Debug.WriteLine("Reset");
+        this.evaluted = false;
         this.Expression = string.Empty;
         this.AfterCommit();
     }
@@ -290,6 +319,7 @@ public partial class MainWindow : Window
     /// </summary>
     private void ResolveDecimalInput()
     {
+        this.PreResolve();
         if (this.CurrentNumber % 1 == 0)
         {
             this.decimalInputFlag = true;
@@ -302,6 +332,7 @@ public partial class MainWindow : Window
     /// <param name="inputString">The string to attempt to resolve.</param>
     private void ResolveNumberlInput(string? inputString)
     {
+        this.PreResolve();
         string prefix = this.negativeValueFlag ? "-" : string.Empty;
         string divider = this.decimalInputFlag ? "." : string.Empty;
         string concatNumber = prefix + this.CurrentNumber.ToString() + divider + inputString;
@@ -310,7 +341,7 @@ public partial class MainWindow : Window
             this.CurrentNumber = userInput;
             this.decimalInputFlag = false;
             this.negativeValueFlag = false;
-            this.UpdateResult(this.CurrentNumber.ToString());
+            this.UpdateResultOutput(this.CurrentNumber.ToString());
         }
     }
 
@@ -320,26 +351,27 @@ public partial class MainWindow : Window
     /// <param name="operation">The operation to add.</param>
     private void ResolveOperator(string? operation)
     {
+        this.PreResolve();
         if (operation != null && this.operators.Contains(operation))
         {
-            if (this.CurrentNumber != 0)
+            if (this.CurrentNumber == 0 && operation == "-")
+            {
+                this.negativeValueFlag = true;
+            }
+            else if (this.CurrentNumber != 0)
             {
                 this.CommitNumber();
                 this.Expression += $" {operation} ";
             }
-            else if (operation == "-")
-            {
-                this.negativeValueFlag = true;
-            }
         }
 
-        this.UpdateHistory();
+        this.UpdateHistoryOutput();
     }
 
     /// <summary>
     /// Update the equation history.
     /// </summary>
-    private void UpdateHistory()
+    private void UpdateHistoryOutput()
     {
         this.CurrentEquation.Content = this.Expression;
     }
@@ -348,8 +380,9 @@ public partial class MainWindow : Window
     /// Update the view to display the given result.
     /// </summary>
     /// <param name="result">The result to display.</param>
-    private void UpdateResult(string result)
+    private void UpdateResultOutput(string result)
     {
         this.Result.Content = result;
+        this.UpdateHistoryOutput();
     }
 }
