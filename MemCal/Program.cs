@@ -1,6 +1,7 @@
-﻿namespace MemCal;
+﻿namespace MemCal; 
 
 using Avalonia;
+using Avalonia.ReactiveUI;
 using System;
 
 /// <summary>
@@ -15,7 +16,8 @@ public class Program
     /// </summary>
     /// <param name="args">The command line arguments.</param>
     [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+    public static void Main(string[] args) => BuildAvaloniaApp()
+        .StartWithClassicDesktopLifetime(args);
 
     /// <summary>
     /// Avalonia configuration, don't remove; also used by visual designer.
@@ -24,5 +26,6 @@ public class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .LogToTrace();
+            .LogToTrace()
+            .UseReactiveUI();
 }

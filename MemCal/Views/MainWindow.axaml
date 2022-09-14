@@ -1,0 +1,158 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MemCal.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        d:DesignWidth="235"
+        d:DesignHeight="350"
+        MaxHeight="350"
+        MinHeight="350"
+        MaxWidth="235"
+        MinWidth="235"
+        Background="Transparent"
+        TransparencyLevelHint="AcrylicBlur"
+        x:Class="MemCal.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        KeyDown="KeyDownHandler"
+        Title="MemCal">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+  <Grid x:Name="CalculatorGrid"
+        ColumnDefinitions="*,*,*,*"
+        RowDefinitions=".5*,1.5*,*,*,*,*,*"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        Background="{StaticResource ResourceKey=OutputBgColour}">
+
+    <Label x:Name="CurrentEquation"
+           Grid.Column="0"
+           Grid.ColumnSpan="4"
+           Grid.Row="0"
+           Classes="LabelBase" />
+
+    <Label x:Name="Result"
+           Grid.Column="0"
+           Grid.ColumnSpan="4"
+           Grid.Row="1"
+           Classes="LabelBase LabelResult" />
+
+    <Button x:Name="ActionClear"
+            Grid.Column="0"
+            Grid.Row="2"
+            Classes="BtnBase BtnAction"
+            Content="AC" />
+
+    <Button x:Name="ActionNegate"
+            Grid.Column="1"
+            Grid.Row="2"
+            Classes="BtnBase BtnAction"
+            Content="+/-" />
+
+    <Button x:Name="ActionPercent"
+            Grid.Column="2"
+            Grid.Row="2"
+            Classes="BtnBase BtnAction"
+            Content="%" />
+
+    <Button x:Name="OperatorDivide"
+            Grid.Column="3"
+            Grid.Row="2"
+            Classes="BtnBase BtnOperator"
+            Content="/" />
+
+    <Button x:Name="InputNumber7"
+            Grid.Column="0"
+            Grid.Row="3"
+            Classes="BtnBase"
+            Content="7" />
+
+    <Button x:Name="InputNumber8"
+            Grid.Column="1"
+            Grid.Row="3"
+            Classes="BtnBase"
+            Content="8" />
+
+    <Button x:Name="InputNumber9"
+            Grid.Column="2"
+            Grid.Row="3"
+            Classes="BtnBase"
+            Content="9" />
+
+    <Button x:Name="OperatorMultiply"
+            Grid.Column="3"
+            Grid.Row="3"
+            Classes="BtnBase BtnOperator"
+            Content="*" />
+
+    <Button x:Name="InputNumber4"
+            Grid.Column="0"
+            Grid.Row="4"
+            Classes="BtnBase"
+            Content="4" />
+
+    <Button x:Name="InputNumber5"
+            Grid.Column="1"
+            Grid.Row="4"
+            Classes="BtnBase"
+            Content="5" />
+
+    <Button x:Name="InputNumber6"
+            Grid.Column="2"
+            Grid.Row="4"
+            Classes="BtnBase"
+            Content="6" />
+
+    <Button x:Name="OperatorSubtract"
+            Grid.Column="3"
+            Grid.Row="4"
+            Classes="BtnBase BtnOperator"
+            Content="-" />
+
+    <Button x:Name="InputNumber1"
+            Grid.Column="0"
+            Grid.Row="5"
+            Classes="BtnBase"
+            Content="1" />
+
+    <Button x:Name="InputNumber2"
+            Grid.Column="1"
+            Grid.Row="5"
+            Classes="BtnBase"
+            Content="2" />
+
+    <Button x:Name="InputNumber3"
+            Grid.Column="2"
+            Grid.Row="5"
+            Classes="BtnBase"
+            Content="3" />
+
+    <Button x:Name="OperatorAdd"
+            Grid.Column="3"
+            Grid.Row="5"
+            Classes="BtnBase BtnOperator"
+            Content="+" />
+
+    <Button x:Name="InputNumber0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Grid.Row="6"
+            Classes="BtnBase"
+            Content="0" />
+
+    <Button x:Name="InputDecimal"
+            Grid.Column="2"
+            Grid.Row="6"
+            Classes="BtnBase"
+            Content="." />
+
+    <Button x:Name="OperatorCalculate"
+            Grid.Column="3"
+            Grid.Row="6"
+            Classes="BtnBase BtnOperator"
+            Content="=" />
+  </Grid>
+</Window>
