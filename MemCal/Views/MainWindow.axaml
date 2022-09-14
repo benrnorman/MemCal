@@ -15,6 +15,7 @@
         x:Class="MemCal.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         KeyDown="KeyDownHandler"
+        KeyUp="KeyUpHandler"
         Title="MemCal">
 
     <Design.DataContext>

@@ -3,10 +3,10 @@ namespace MemCal.Views;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using org.mariuszgromada.math.mxparser;
+using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
-using System.Windows.Input;
 
 /// <summary>
 /// Code-behind from the MainWindow the app launches to.
@@ -16,15 +16,17 @@ public partial class MainWindow : Window
     // FIELDS
     // ============
 
-    private readonly DataTable dt = new DataTable();
-
-    private readonly HashSet<string> operators = new HashSet<string> { "+", "-", "*", "/", "^", "%" };
+    private static HashSet<string> operators = new HashSet<string> { "+", "-", "*", "/", "^", "%" };
 
     private bool decimalInputFlag = false;
 
     private bool evaluted = false;
 
     private bool negativeValueFlag = false;
+
+    private bool shiftLeftDownFlag = false;
+
+    private bool shiftRightDownFlag = false;
 
 
 
@@ -67,6 +69,23 @@ public partial class MainWindow : Window
     /// Gets or sets the current number.
     /// </summary>
     public double CurrentNumber { get; set; }
+
+    /// <summary>
+    /// Gets the last character in the expression.
+    /// </summary>
+    public char? LastChar
+    {
+        get
+        {
+            string trimmedExpression = this.Expression.Trim(' ');
+            if (trimmedExpression.Length > 0)
+            {
+                return trimmedExpression[trimmedExpression.Length - 1];
+            }
+
+            return null;
+        }
+    }
 
     /// <summary>
     /// Gets or sets the full mathematical expression the user has input.
@@ -136,14 +155,13 @@ public partial class MainWindow : Window
         if (!this.evaluted)
         {
             this.CommitNumber();
-            Debug.WriteLine(this.Expression);
             if (this.Expression != string.Empty)
             {
                 string? result = string.Empty;
                 try
                 {
-                    result = this.dt.Compute(this.Expression, null).ToString();
-                    result = result == null ? string.Empty : result;
+                    Expression evaluation = new Expression(this.Expression);
+                    result = evaluation.calculate().ToString();
                 }
                 catch
                 {
@@ -174,14 +192,18 @@ public partial class MainWindow : Window
     /// </summary>
     private void CommitNumber()
     {
+        Debug.WriteLine(this.LastChar);
         if (this.CurrentNumber != 0 || this.Expression != string.Empty)
         {
-            if (this.Expression != string.Empty)
+            if (this.LastChar != '%')
             {
-                this.Expression += " ";
-            }
+                if (this.Expression != string.Empty)
+                {
+                    this.Expression += " ";
+                }
 
-            this.Expression += this.CurrentNumber;
+                this.Expression += this.CurrentNumber;
+            }
         }
 
         this.AfterCommit();
@@ -210,24 +232,30 @@ public partial class MainWindow : Window
             Button inputBtn = (Button)sender;
             this.ResolveNumberlInput(inputBtn.Content.ToString());
         }
+
         this.PostClickAction();
     }
 
     /// <summary>
-    /// Handles keyboard input.
+    /// Handles keyboard key presses.
     /// </summary>
     /// <param name="sender">The element that sent this command.</param>
     /// <param name="e">The key event parameters.</param>
     private void KeyDownHandler(object sender, KeyEventArgs e)
     {
-        Debug.WriteLine(e.Key.ToString());
+        string inputString = string.Empty;
         switch (e.Key)
         {
+            case Key.LeftShift:
+                this.shiftLeftDownFlag = true;
+                break;
+            case Key.RightShift:
+                this.shiftRightDownFlag = true;
+                break;
             case Key.D1:
             case Key.D2:
             case Key.D3:
             case Key.D4:
-            case Key.D5:
             case Key.D6:
             case Key.D7:
             case Key.D8:
@@ -243,8 +271,20 @@ public partial class MainWindow : Window
             case Key.NumPad8:
             case Key.NumPad9:
             case Key.NumPad0:
-                string inputString = e.Key.ToString().Replace("NumPad", string.Empty).Replace("D", string.Empty);
+                inputString = e.Key.ToString().Replace("NumPad", string.Empty).Replace("D", string.Empty);
                 this.ResolveNumberlInput(inputString);
+                break;
+            case Key.D5:
+                if (this.shiftRightDownFlag || this.shiftLeftDownFlag)
+                {
+                    this.ResolveOperator("%");
+                }
+                else
+                {
+                    inputString = e.Key.ToString().Replace("NumPad", string.Empty).Replace("D", string.Empty);
+                    this.ResolveNumberlInput(inputString);
+                }
+
                 break;
             case Key.Add:
                 this.ResolveOperator("+");
@@ -263,6 +303,24 @@ public partial class MainWindow : Window
                 break;
             case Key.Return:
                 this.Calculate();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Handles keyboard key presses.
+    /// </summary>
+    /// <param name="sender">The element that sent this command.</param>
+    /// <param name="e">The key event parameters.</param>
+    private void KeyUpHandler(object sender, KeyEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case Key.LeftShift:
+                this.shiftLeftDownFlag = false;
+                break;
+            case Key.RightShift:
+                this.shiftRightDownFlag = false;
                 break;
         }
     }
@@ -307,7 +365,6 @@ public partial class MainWindow : Window
     /// </summary>
     private void Reset()
     {
-        Debug.WriteLine("Reset");
         this.evaluted = false;
         this.Expression = string.Empty;
         this.AfterCommit();
@@ -352,7 +409,7 @@ public partial class MainWindow : Window
     private void ResolveOperator(string? operation)
     {
         this.PreResolve();
-        if (operation != null && this.operators.Contains(operation))
+        if (operation != null && operators.Contains(operation))
         {
             if (this.CurrentNumber == 0 && operation == "-")
             {
@@ -361,7 +418,8 @@ public partial class MainWindow : Window
             else if (this.CurrentNumber != 0)
             {
                 this.CommitNumber();
-                this.Expression += $" {operation} ";
+                string prefix = operation == "%" ? string.Empty : " ";
+                this.Expression += $"{prefix}{operation} ";
             }
         }
 
