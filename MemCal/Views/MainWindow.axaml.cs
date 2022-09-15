@@ -287,9 +287,11 @@ public partial class MainWindow : Window
 
                 break;
             case Key.Add:
+            case Key.OemPlus:
                 this.ResolveOperator("+");
                 break;
             case Key.Subtract:
+            case Key.OemMinus:
                 this.ResolveOperator("-");
                 break;
             case Key.Multiply:
