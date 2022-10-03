@@ -192,7 +192,6 @@ public partial class MainWindow : Window
     /// </summary>
     private void CommitNumber()
     {
-        Debug.WriteLine(this.LastChar);
         if (this.CurrentNumber != 0 || this.Expression != string.Empty)
         {
             if (this.LastChar != '%')

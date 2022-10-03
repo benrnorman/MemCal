@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:MemCal.ViewModels"
+        xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
@@ -50,20 +51,20 @@
     <Button x:Name="ActionNegate"
             Grid.Column="1"
             Grid.Row="2"
-            Classes="BtnBase BtnAction"
-            Content="+/-" />
+            Classes="BtnBase BtnAction BtnIcon"
+            i:Attached.Icon="fa-solid fa-plus-minus" />
 
     <Button x:Name="ActionPercent"
             Grid.Column="2"
             Grid.Row="2"
-            Classes="BtnBase BtnAction"
-            Content="%" />
+            Classes="BtnBase BtnAction BtnIcon"
+            i:Attached.Icon="fa-solid fa-percent" />
 
     <Button x:Name="OperatorDivide"
             Grid.Column="3"
             Grid.Row="2"
-            Classes="BtnBase BtnOperator"
-            Content="/" />
+            Classes="BtnBase BtnOperator BtnIcon"
+            i:Attached.Icon="fa-solid fa-divide" />
 
     <Button x:Name="InputNumber7"
             Grid.Column="0"
@@ -86,8 +87,8 @@
     <Button x:Name="OperatorMultiply"
             Grid.Column="3"
             Grid.Row="3"
-            Classes="BtnBase BtnOperator"
-            Content="*" />
+            Classes="BtnBase BtnOperator BtnIcon"
+            i:Attached.Icon="fa-solid fa-xmark" />
 
     <Button x:Name="InputNumber4"
             Grid.Column="0"
@@ -110,8 +111,8 @@
     <Button x:Name="OperatorSubtract"
             Grid.Column="3"
             Grid.Row="4"
-            Classes="BtnBase BtnOperator"
-            Content="-" />
+            Classes="BtnBase BtnOperator BtnIcon"
+            i:Attached.Icon="fa-solid fa-minus" />
 
     <Button x:Name="InputNumber1"
             Grid.Column="0"
@@ -134,8 +135,8 @@
     <Button x:Name="OperatorAdd"
             Grid.Column="3"
             Grid.Row="5"
-            Classes="BtnBase BtnOperator"
-            Content="+" />
+            Classes="BtnBase BtnOperator BtnIcon"
+            i:Attached.Icon="fa-solid fa-plus" />
 
     <Button x:Name="InputNumber0"
             Grid.Column="0"
@@ -153,7 +154,7 @@
     <Button x:Name="OperatorCalculate"
             Grid.Column="3"
             Grid.Row="6"
-            Classes="BtnBase BtnOperator"
-            Content="=" />
+            Classes="BtnBase BtnOperator BtnIcon"
+            i:Attached.Icon="fa-solid fa-equals" />
   </Grid>
 </Window>

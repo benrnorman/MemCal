@@ -1,7 +1,9 @@
-﻿namespace MemCal; 
+﻿namespace MemCal;
 
 using Avalonia;
 using Avalonia.ReactiveUI;
+using Projektanker.Icons.Avalonia;
+using Projektanker.Icons.Avalonia.FontAwesome;
 using System;
 
 /// <summary>
@@ -27,5 +29,6 @@ public class Program
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .LogToTrace()
+            .WithIcons(container => container.Register<FontAwesomeIconProvider>())
             .UseReactiveUI();
 }

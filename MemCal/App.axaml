@@ -53,5 +53,9 @@
     <Style Selector="Button.BtnOperator">
       <Setter Property="Background" Value="{StaticResource ResourceKey=BtnOperatorBgColour}" />
     </Style>
+
+    <Style Selector="Button.BtnIcon">
+      <Setter Property="FontSize" Value="15" />
+    </Style>
   </Application.Styles>
 </Application>
