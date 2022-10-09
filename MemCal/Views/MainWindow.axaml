@@ -2,8 +2,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:MemCal.ViewModels"
         xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
+        xmlns:o="using:MemCal.Models.DataTypes.Enums"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         d:DesignWidth="235"
         d:DesignHeight="350"
@@ -17,11 +19,12 @@
         Icon="/Assets/avalonia-logo.ico"
         KeyDown="KeyDownHandler"
         KeyUp="KeyUpHandler"
-        Title="MemCal">
+        Title="MemCal"
+>
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+  <Design.DataContext>
+    <vm:MainWindowViewModel/>
+  </Design.DataContext>
 
   <Grid x:Name="CalculatorGrid"
         ColumnDefinitions="*,*,*,*"
@@ -45,6 +48,7 @@
     <Button x:Name="ActionClear"
             Grid.Column="0"
             Grid.Row="2"
+            Command="{Binding OperatorCommand}"
             Classes="BtnBase BtnAction"
             Content="AC" />
 
@@ -63,87 +67,172 @@
     <Button x:Name="OperatorDivide"
             Grid.Column="3"
             Grid.Row="2"
+            IsEnabled="True"
+            Command="{Binding OperatorCommand}"
             Classes="BtnBase BtnOperator BtnIcon"
-            i:Attached.Icon="fa-solid fa-divide" />
+            i:Attached.Icon="fa-solid fa-divide"
+    >
+      <Button.CommandParameter>
+        <o:Operation>Division</o:Operation>
+      </Button.CommandParameter>
+    </Button>
 
     <Button x:Name="InputNumber7"
             Grid.Column="0"
             Grid.Row="3"
+            Command="{Binding NumberInputCommand}"
             Classes="BtnBase"
-            Content="7" />
+            Content="7"
+    >
+      <Button.CommandParameter>
+        <sys:Int32>7</sys:Int32>
+      </Button.CommandParameter>
+    </Button>
 
     <Button x:Name="InputNumber8"
             Grid.Column="1"
             Grid.Row="3"
+            Command="{Binding NumberInputCommand}"
             Classes="BtnBase"
-            Content="8" />
+            Content="8"
+    >
+      <Button.CommandParameter>
+        <sys:Int32>8</sys:Int32>
+      </Button.CommandParameter>
+    </Button>
 
     <Button x:Name="InputNumber9"
             Grid.Column="2"
             Grid.Row="3"
+            Command="{Binding NumberInputCommand}"
             Classes="BtnBase"
-            Content="9" />
+            Content="9"
+    >
+      <Button.CommandParameter>
+        <sys:Int32>9</sys:Int32>
+      </Button.CommandParameter>
+    </Button>
 
     <Button x:Name="OperatorMultiply"
             Grid.Column="3"
             Grid.Row="3"
+            Command="{Binding OperatorCommand}"
             Classes="BtnBase BtnOperator BtnIcon"
-            i:Attached.Icon="fa-solid fa-xmark" />
+            i:Attached.Icon="fa-solid fa-xmark"
+    >
+      <Button.CommandParameter>
+        <o:Operation>Multiplication</o:Operation>
+      </Button.CommandParameter>
+    </Button>
 
     <Button x:Name="InputNumber4"
             Grid.Column="0"
             Grid.Row="4"
+            Command="{Binding NumberInputCommand}"
             Classes="BtnBase"
-            Content="4" />
+            Content="4"
+    >
+      <Button.CommandParameter>
+        <sys:Int32>4</sys:Int32>
+      </Button.CommandParameter>
+    </Button>
 
     <Button x:Name="InputNumber5"
             Grid.Column="1"
             Grid.Row="4"
+            Command="{Binding NumberInputCommand}"
             Classes="BtnBase"
-            Content="5" />
+            Content="5"
+    >
+      <Button.CommandParameter>
+        <sys:Int32>5</sys:Int32>
+      </Button.CommandParameter>
+    </Button>
 
     <Button x:Name="InputNumber6"
             Grid.Column="2"
             Grid.Row="4"
+            Command="{Binding NumberInputCommand}"
             Classes="BtnBase"
-            Content="6" />
+            Content="6"
+    >
+      <Button.CommandParameter>
+        <sys:Int32>6</sys:Int32>
+      </Button.CommandParameter>
+    </Button>
 
     <Button x:Name="OperatorSubtract"
             Grid.Column="3"
             Grid.Row="4"
+            Command="{Binding OperatorCommand}"
             Classes="BtnBase BtnOperator BtnIcon"
-            i:Attached.Icon="fa-solid fa-minus" />
+            i:Attached.Icon="fa-solid fa-minus"
+    >
+      <Button.CommandParameter>
+        <o:Operation>Subtraction</o:Operation>
+      </Button.CommandParameter>
+    </Button>
 
     <Button x:Name="InputNumber1"
             Grid.Column="0"
             Grid.Row="5"
+            Command="{Binding NumberInputCommand}"
             Classes="BtnBase"
-            Content="1" />
+            Content="1"
+    >
+      <Button.CommandParameter>
+        <sys:Int32>1</sys:Int32>
+      </Button.CommandParameter>
+    </Button>
 
     <Button x:Name="InputNumber2"
             Grid.Column="1"
             Grid.Row="5"
+            Command="{Binding NumberInputCommand}"
             Classes="BtnBase"
-            Content="2" />
+            Content="2"
+    >
+      <Button.CommandParameter>
+        <sys:Int32>2</sys:Int32>
+      </Button.CommandParameter>
+    </Button>
 
     <Button x:Name="InputNumber3"
             Grid.Column="2"
             Grid.Row="5"
+            Command="{Binding NumberInputCommand}"
             Classes="BtnBase"
-            Content="3" />
+            Content="3"
+    >
+      <Button.CommandParameter>
+        <sys:Int32>3</sys:Int32>
+      </Button.CommandParameter>
+    </Button>
 
     <Button x:Name="OperatorAdd"
             Grid.Column="3"
             Grid.Row="5"
+            Command="{Binding OperatorCommand}"
             Classes="BtnBase BtnOperator BtnIcon"
-            i:Attached.Icon="fa-solid fa-plus" />
+            i:Attached.Icon="fa-solid fa-plus"
+    >
+      <Button.CommandParameter>
+        <o:Operation>Addition</o:Operation>
+      </Button.CommandParameter>
+    </Button>
 
     <Button x:Name="InputNumber0"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Grid.Row="6"
+            Command="{Binding NumberInputCommand}"
             Classes="BtnBase"
-            Content="0" />
+            Content="0"
+    >
+      <Button.CommandParameter>
+        <sys:Int32>0</sys:Int32>
+      </Button.CommandParameter>
+    </Button>
 
     <Button x:Name="InputDecimal"
             Grid.Column="2"
