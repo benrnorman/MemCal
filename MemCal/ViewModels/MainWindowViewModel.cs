@@ -1,13 +1,9 @@
 ﻿namespace MemCal.ViewModels;
 
-using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
 using org.mariuszgromada.math.mxparser;
 using ReactiveUI;
 using System.Reactive;
 using MemCal.Models.DataTypes.Enums;
-using Avalonia.Animation;
 
 /// <summary>
 /// The viewmodel for the main window.
@@ -21,7 +17,11 @@ public class MainWindowViewModel : ViewModelBase
 
     private bool evaluted = false;
 
+    private string expression = string.Empty;
+
     private bool negativeValueFlag = false;
+
+    private string result = string.Empty;
 
 
 
@@ -33,9 +33,13 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     public MainWindowViewModel()
     {
-        this.NumberInputCommand = ReactiveCommand.Create<int>(this.ResolveNumberInput);
-        this.OperatorCommand = ReactiveCommand.Create<Operation?>(this.ResolveOperator);
-        this.ResetCommand = ReactiveCommand.Create(this.ActionClear);
+        this.ActionClearCommand = ReactiveCommand.Create(this.ActionClear);
+        this.ActionNegateCommand = ReactiveCommand.Create(this.ActionNegate);
+        this.CalculateCommand = ReactiveCommand.Create(this.Calculate);
+        this.InputDecimalCommand = ReactiveCommand.Create(this.InputDecimal);
+        this.InputNumberCommand = ReactiveCommand.Create<int>(this.InputNumber);
+        this.InputOperatorCommand = ReactiveCommand.Create<Operation?>(this.InputOperator);
+        this.InputPercentCommand = ReactiveCommand.Create(this.InputPercent);
     }
 
 
@@ -44,9 +48,54 @@ public class MainWindowViewModel : ViewModelBase
     // ============
 
     /// <summary>
+    /// Gets the reset command.
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> ActionClearCommand { get; }
+
+    /// <summary>
+    /// Gets the negate command.
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> ActionNegateCommand { get; }
+
+    /// <summary>
+    /// Gets the calculate command.
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> CalculateCommand { get; }
+
+    /// <summary>
     /// Gets or sets the current number.
     /// </summary>
     public double CurrentNumber { get; set; }
+
+
+    /// <summary>
+    /// Gets or sets the full mathematical expression the user has input.
+    /// </summary>
+    public string Expression
+    {
+        get => this.expression;
+        set => this.RaiseAndSetIfChanged(ref this.expression, value);
+    }
+
+    /// <summary>
+    /// Gets the decimal input command.
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> InputDecimalCommand { get; }
+
+    /// <summary>
+    /// Gets the number input command.
+    /// </summary>
+    public ReactiveCommand<int, Unit> InputNumberCommand { get; }
+
+    /// <summary>
+    /// Gets the operator command.
+    /// </summary>
+    public ReactiveCommand<Operation?, Unit> InputOperatorCommand { get; }
+
+    /// <summary>
+    /// Gets the percentage input command.
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> InputPercentCommand { get; }
 
     /// <summary>
     /// Gets the last character in the expression.
@@ -66,24 +115,18 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Gets or sets the full mathematical expression the user has input.
+    /// Gets or sets a value indicating whether to reset focus.
     /// </summary>
-    public string Expression { get; set; } = string.Empty;
+    public bool ResetFocus { get; set; }
 
     /// <summary>
-    /// Gets the numner input command.
+    /// Gets or sets the result string.
     /// </summary>
-    public ReactiveCommand<int, Unit> NumberInputCommand { get; }
-
-    /// <summary>
-    /// Gets the operator command.
-    /// </summary>
-    public ReactiveCommand<Operation?, Unit> OperatorCommand { get; }
-
-    /// <summary>
-    /// Gets the reset command.
-    /// </summary>
-    public ReactiveCommand<Unit, Unit> ResetCommand { get; }
+    public string Result
+    {
+        get => this.result;
+        set => this.RaiseAndSetIfChanged(ref this.result, value);
+    }
 
 
 
@@ -91,117 +134,9 @@ public class MainWindowViewModel : ViewModelBase
     // ============
 
     /// <summary>
-    /// Clears the input and views.
-    /// </summary>
-    private void ActionClear()
-    {
-        this.Reset();
-        this.PostInputAction();
-    }
-
-    /// <summary>
-    /// Resolve the string number input by adding it to the current number.
-    /// </summary>
-    /// <param name="input">The string to attempt to resolve.</param>
-    private void ResolveNumberInput(int input)
-    {
-        this.PreResolve();
-        string prefix = this.negativeValueFlag ? "-" : string.Empty;
-        string divider = this.decimalInputFlag ? "." : string.Empty;
-        string concatNumber = prefix + this.CurrentNumber.ToString() + divider + input;
-        if (double.TryParse(concatNumber, out double userInput))
-        {
-            this.CurrentNumber = userInput;
-            this.decimalInputFlag = false;
-            this.negativeValueFlag = false;
-            this.UpdateResultOutput(this.CurrentNumber.ToString());
-        }
-
-        this.PostInputAction();
-    }
-
-    /// <summary>
-    /// Resolve the operator by adding it to the existing expression, if possible.
-    /// </summary>
-    /// <param name="operation">The operation to add.</param>
-    private void ResolveOperator(Operation? operation)
-    {
-        this.PreResolve();
-        if (operation != null)
-        {
-            if (this.CurrentNumber == 0 && operation == Operation.Subtraction)
-            {
-                this.negativeValueFlag = true;
-            }
-            else if (this.CurrentNumber != 0)
-            {
-                this.CommitNumber();
-                string prefix = operation == Operation.Percentage ? string.Empty : " ";
-                this.Expression += $"{prefix}{(char)operation} ";
-            }
-        }
-
-        this.UpdateHistoryOutput();
-    }
-
-    /// <summary>
-    /// Reset the state to intial values.
-    /// </summary>
-    private void Reset()
-    {
-        this.evaluted = false;
-        this.Expression = string.Empty;
-        this.AfterCommit();
-    }
-
-
-
-
-
-
-    /// <summary>
-    /// Handles clicks on negate button.
-    /// </summary>
-    /// <param name="sender">The element that sent this command.</param>
-    /// <param name="e">The event parameters.</param>
-    private void ActionNegateClick(object? sender, RoutedEventArgs e)
-    {
-        this.CurrentNumber *= -1;
-        this.UpdateResultOutput(this.CurrentNumber.ToString());
-        this.PostInputAction();
-    }
-
-    /// <summary>
-    /// Handles clicks on percent button.
-    /// </summary>
-    /// <param name="sender">The element that sent this command.</param>
-    /// <param name="e">The event parameters.</param>
-    private void ActionPercentClick(object? sender, RoutedEventArgs e)
-    {
-        if (this.CurrentNumber != 0)
-        {
-            this.Expression += this.CurrentNumber.ToString() + "%";
-        }
-
-        this.AfterCommit();
-        this.PostInputAction();
-    }
-
-    /// <summary>
-    /// After committing to the input string, reset the last number and decimal flag.
-    /// </summary>
-    private void AfterCommit()
-    {
-        this.CurrentNumber = 0;
-        this.decimalInputFlag = false;
-        this.negativeValueFlag = false;
-        this.UpdateResultOutput(string.Empty);
-    }
-
-    /// <summary>
     /// Evalutae the input string and display the result.
     /// </summary>
-    private void Calculate()
+    public void Calculate()
     {
         if (!this.evaluted)
         {
@@ -220,21 +155,114 @@ public class MainWindowViewModel : ViewModelBase
                 }
 
                 this.evaluted = true;
-                this.Expression += " =";
-                this.UpdateResultOutput(result);
+                this.UpdateExpression(" =");
+                this.UpdateResult(result);
+                this.PostInteraction();
             }
         }
     }
 
     /// <summary>
-    /// Fire the calculate function.
+    /// Resolve the decimal input by adding the decimal flag only if the
+    /// current number is not already a decimal.
     /// </summary>
-    /// <param name="sender">The element that sent this command.</param>
-    /// <param name="e">The event parameters.</param>
-    private void CalculateClick(object? sender, RoutedEventArgs e)
+    public void InputDecimal()
     {
-        this.Calculate();
-        this.PostInputAction();
+        this.PreInput();
+        if (this.CurrentNumber % 1 == 0)
+        {
+            this.decimalInputFlag = true;
+        }
+
+        this.PostInteraction();
+    }
+
+    /// <summary>
+    /// Resolve the string number input by adding it to the current number.
+    /// </summary>
+    /// <param name="input">The string to attempt to resolve.</param>
+    public void InputNumber(int input)
+    {
+        this.PreInput();
+        string prefix = this.negativeValueFlag ? "-" : string.Empty;
+        string divider = this.decimalInputFlag ? "." : string.Empty;
+        string concatNumber = prefix + this.CurrentNumber.ToString() + divider + input;
+        if (double.TryParse(concatNumber, out double userInput))
+        {
+            this.CurrentNumber = userInput;
+            this.decimalInputFlag = false;
+            this.negativeValueFlag = false;
+            this.UpdateResult(this.CurrentNumber.ToString());
+            this.PostInteraction();
+        }
+    }
+
+    /// <summary>
+    /// Resolve the operator by adding it to the existing expression, if possible.
+    /// </summary>
+    /// <param name="operation">The operation to add.</param>
+    public void InputOperator(Operation? operation)
+    {
+        this.PreInput();
+        if (operation != null)
+        {
+            if (this.CurrentNumber == 0 && operation == Operation.Subtraction)
+            {
+                this.negativeValueFlag = true;
+            }
+            else if (this.CurrentNumber != 0)
+            {
+                this.CommitNumber();
+                string prefix = operation == Operation.Percentage ? string.Empty : " ";
+                this.UpdateExpression($"{prefix}{(char)operation} ");
+            }
+        }
+
+        this.PostInteraction();
+    }
+
+    /// <summary>
+    /// Handles percentage input.
+    /// </summary>
+    public void InputPercent()
+    {
+        if (this.CurrentNumber != 0)
+        {
+            this.UpdateExpression(this.CurrentNumber.ToString() + "%");
+        }
+
+        this.AfterCommit();
+        this.PostInteraction();
+    }
+
+    /// <summary>
+    /// Clears the input and views.
+    /// </summary>
+    private void ActionClear()
+    {
+        this.Reset();
+        this.PostInteraction();
+    }
+
+    /// <summary>
+    /// Negates the current number.
+    /// </summary>
+    private void ActionNegate()
+    {
+        this.CurrentNumber *= -1;
+        this.UpdateResult(this.CurrentNumber.ToString());
+        this.PostInteraction();
+    }
+
+    /// <summary>
+    /// After committing to the input string, reset the last number and decimal flag.
+    /// </summary>
+    private void AfterCommit()
+    {
+        this.CurrentNumber = 0;
+        this.decimalInputFlag = false;
+        this.negativeValueFlag = false;
+        this.Result = string.Empty;
     }
 
     /// <summary>
@@ -249,10 +277,10 @@ public class MainWindowViewModel : ViewModelBase
             {
                 if (this.Expression != string.Empty)
                 {
-                    this.Expression += " ";
+                    this.UpdateExpression(" ");
                 }
 
-                this.Expression += this.CurrentNumber;
+                this.UpdateExpression(this.CurrentNumber.ToString());
             }
         }
 
@@ -260,28 +288,17 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Handles clicks on the decimal input button.
+    /// After resolving and interaction, notify the view.
     /// </summary>
-    /// <param name="sender">The element that sent this command.</param>
-    /// <param name="e">The event parameters.</param>
-    private void InputDecimalClick(object? sender, RoutedEventArgs e)
+    private void PostInteraction()
     {
-        this.ResolveDecimalInput();
-        this.PostInputAction();
-    }
-
-    /// <summary>
-    /// After clicking an input, reset focus.
-    /// </summary>
-    private void PostInputAction()
-    {
-        // this.Result.Focus();
+        this.ResetFocus = !this.ResetFocus;
     }
 
     /// <summary>
     /// Actions to run prior resolving any input.
     /// </summary>
-    private void PreResolve()
+    private void PreInput()
     {
         if (this.evaluted)
         {
@@ -290,33 +307,31 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Resolve the decimal input by adding the decimal flag only if the
-    /// current number is not already a decimal.
+    /// Reset the state to intial values.
     /// </summary>
-    private void ResolveDecimalInput()
+    private void Reset()
     {
-        this.PreResolve();
-        if (this.CurrentNumber % 1 == 0)
-        {
-            this.decimalInputFlag = true;
-        }
+        this.evaluted = false;
+        this.Expression = string.Empty;
+        this.AfterCommit();
     }
 
     /// <summary>
-    /// Update the equation history.
+    /// Update the equation with the given string.
     /// </summary>
-    private void UpdateHistoryOutput()
+    /// <param name="update">The string to append to the expression.</param>
+    private void UpdateExpression(string update)
     {
-        // this.CurrentEquation.Content = this.Expression;
+        this.Expression += update;
     }
 
     /// <summary>
     /// Update the view to display the given result.
     /// </summary>
     /// <param name="result">The result to display.</param>
-    private void UpdateResultOutput(string result)
+    private void UpdateResult(string result)
     {
-        // this.Result.Content = result;
-        this.UpdateHistoryOutput();
+        System.Diagnostics.Debug.WriteLine(result);
+        this.Result = result;
     }
 }
