@@ -2,7 +2,9 @@
 
 using org.mariuszgromada.math.mxparser;
 using ReactiveUI;
+using System;
 using System.Reactive;
+using System.Reactive.Linq;
 using MemCal.Models.DataTypes.Enums;
 
 /// <summary>
@@ -20,6 +22,8 @@ public class MainWindowViewModel : ViewModelBase
     private string expression = string.Empty;
 
     private bool negativeValueFlag = false;
+
+    private bool refocus = false;
 
     private string result = string.Empty;
 
@@ -115,9 +119,13 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether to reset focus.
+    /// Gets or sets a value indicating whether the view should be updated.
     /// </summary>
-    public bool ResetFocus { get; set; }
+    public bool Refocus
+    {
+        get => this.refocus;
+        set => this.RaiseAndSetIfChanged(ref this.refocus, value);
+    }
 
     /// <summary>
     /// Gets or sets the result string.
@@ -292,7 +300,7 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     private void PostInteraction()
     {
-        this.ResetFocus = !this.ResetFocus;
+        this.Refocus = !this.Refocus;
     }
 
     /// <summary>
@@ -331,7 +339,6 @@ public class MainWindowViewModel : ViewModelBase
     /// <param name="result">The result to display.</param>
     private void UpdateResult(string result)
     {
-        System.Diagnostics.Debug.WriteLine(result);
         this.Result = result;
     }
 }

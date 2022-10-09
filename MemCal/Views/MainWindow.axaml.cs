@@ -4,6 +4,9 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using MemCal.ViewModels;
 using MemCal.Models.DataTypes.Enums;
+using ReactiveUI;
+using System;
+using System.Reactive.Linq;
 
 /// <summary>
 /// Code-behind from the MainWindow the app launches to.
@@ -19,12 +22,26 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         this.InitializeComponent();
+        this.DataContextChanged += this.InitialiseWatchers;
     }
-
 
 
     // METHODS
     // ============
+
+    /// <summary>
+    /// Watches the viewmodel for hints on when to make changes to the view.
+    /// </summary>
+    /// <param name="sender">The element that fired this method.</param>
+    /// <param name="e">The event parameters.</param>
+    private void InitialiseWatchers(object? sender, EventArgs e)
+    {
+        var vm = (MainWindowViewModel?)this.DataContext;
+        if (vm != null)
+        {
+            vm.WhenAny(vm => vm.Refocus, x => x.Value).Subscribe(x => this.ResetFocus());
+        }
+    }
 
     /// <summary>
     /// Handles keyboard key presses.
@@ -113,9 +130,9 @@ public partial class MainWindow : Window
     }
 
     /// <summary>
-    /// After reset view focus.
+    /// On change, reset the focus in order to capture Return events.
     /// </summary>
-    private void ResetViewFocus()
+    private void ResetFocus()
     {
         this.ResultOutput.Focus();
     }

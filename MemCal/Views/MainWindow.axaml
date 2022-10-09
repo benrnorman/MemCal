@@ -47,7 +47,7 @@
     <Button x:Name="ActionClearButton"
             Grid.Column="0"
             Grid.Row="2"
-            Command="{Binding ActionClearCommand}"
+            Command="{Binding ActionClearCommand}"      
             Classes="BtnBase BtnAction"
             Content="AC" />
 
