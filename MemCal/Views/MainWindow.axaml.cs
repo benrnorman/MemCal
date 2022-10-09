@@ -42,21 +42,6 @@ public partial class MainWindow : Window
         this.ActionClear.Click += this.ActionClearClick;
         this.ActionNegate.Click += this.ActionNegateClick;
         this.ActionPercent.Click += this.ActionPercentClick;
-        this.InputDecimal.Click += this.InputDecimalClick;
-        this.InputNumber0.Click += this.InputNumberClick;
-        this.InputNumber1.Click += this.InputNumberClick;
-        this.InputNumber2.Click += this.InputNumberClick;
-        this.InputNumber3.Click += this.InputNumberClick;
-        this.InputNumber4.Click += this.InputNumberClick;
-        this.InputNumber5.Click += this.InputNumberClick;
-        this.InputNumber6.Click += this.InputNumberClick;
-        this.InputNumber7.Click += this.InputNumberClick;
-        this.InputNumber8.Click += this.InputNumberClick;
-        this.InputNumber9.Click += this.InputNumberClick;
-        this.OperatorAdd.Click += this.OperatorClick;
-        this.OperatorSubtract.Click += this.OperatorClick;
-        this.OperatorMultiply.Click += this.OperatorClick;
-        this.OperatorDivide.Click += this.OperatorClick;
         this.OperatorCalculate.Click += this.CalculateClick;
     }
 
