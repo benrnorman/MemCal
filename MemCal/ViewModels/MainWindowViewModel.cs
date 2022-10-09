@@ -2,8 +2,11 @@
 
 using org.mariuszgromada.math.mxparser;
 using ReactiveUI;
+using System.Collections.Generic;
 using System.Reactive;
 using MemCal.DataTypes.Enums;
+using MemCal.Models;
+using Avalonia.Collections;
 
 /// <summary>
 /// The viewmodel for the main window.
@@ -63,6 +66,11 @@ public class MainWindowViewModel : ViewModelBase
     /// Gets the calculate command.
     /// </summary>
     public ReactiveCommand<Unit, Unit> CalculateCommand { get; }
+
+    /// <summary>
+    /// Gets a list of all the performed calculations.
+    /// </summary>
+    public AvaloniaList<Calculation> Calculations { get; } = new AvaloniaList<Calculation>();
 
     /// <summary>
     /// Gets or sets the current number.
@@ -154,6 +162,8 @@ public class MainWindowViewModel : ViewModelBase
                 {
                     Expression evaluation = new Expression(this.Expression);
                     result = evaluation.calculate().ToString();
+                    Calculation calculation = new Calculation(evaluation);
+                    this.Calculations.Insert(0, calculation);
                 }
                 catch
                 {

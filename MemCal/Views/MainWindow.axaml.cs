@@ -7,6 +7,7 @@ using MemCal.DataTypes.Enums;
 using ReactiveUI;
 using System;
 using System.Reactive.Linq;
+using Avalonia.Interactivity;
 
 /// <summary>
 /// Code-behind from the MainWindow the app launches to.
@@ -23,7 +24,29 @@ public partial class MainWindow : Window
     {
         this.InitializeComponent();
         this.DataContextChanged += this.InitialiseWatchers;
+        this.ToggleHistoryOn.Click += this.ToggleHistoryClick;
+        this.ToggleHistoryOff.Click += this.ToggleHistoryClick;
     }
+
+
+
+    // CONSTRUCTORS
+    // ============
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the calculation history is visible.
+    /// </summary>
+    public bool ShowHistory { get; set; }
+
+    /// <summary>
+    /// Gets the toggle icon value.
+    /// </summary>
+    public string ToggleIcon
+    {
+        get => this.ShowHistory ? "fa-solid fa-toggle-on" : "fa-solid fa-toggle-off";
+    }
+
+
 
 
     // METHODS
@@ -37,10 +60,7 @@ public partial class MainWindow : Window
     private void InitialiseWatchers(object? sender, EventArgs e)
     {
         var vm = (MainWindowViewModel?)this.DataContext;
-        if (vm != null)
-        {
-            vm.WhenAny(vm => vm.Refocus, x => x.Value).Subscribe(x => this.ResetFocus());
-        }
+        vm?.WhenAny(vm => vm.Refocus, x => x.Value).Subscribe(x => this.ResetFocus());
     }
 
     /// <summary>
@@ -135,5 +155,15 @@ public partial class MainWindow : Window
     private void ResetFocus()
     {
         this.ResultOutput.Focus();
+    }
+
+    /// <summary>
+    /// Toggles the history flag.
+    /// </summary>
+    /// <param name="sender">The element that sent this command.</param>
+    /// <param name="e">The event parameters.</param>
+    private void ToggleHistoryClick(object? sender, RoutedEventArgs e)
+    {
+        this.CalculationHistory.IsVisible = !this.CalculationHistory.IsVisible;
     }
 }

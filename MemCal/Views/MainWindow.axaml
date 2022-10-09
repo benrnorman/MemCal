@@ -1,21 +1,22 @@
 <Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:MemCal.ViewModels"
-        xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
-        xmlns:o="using:MemCal.DataTypes.Enums"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:o="using:MemCal.DataTypes.Enums"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:vm="using:MemCal.ViewModels"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:z="using:MemCal.Views.MainWindow"
         mc:Ignorable="d"
         d:DesignHeight="350"
         d:DesignWidth="235"
         Height="350"
         Width="235"
         Background="Transparent"
-        TransparencyLevelHint="AcrylicBlur"
-        x:Class="MemCal.Views.MainWindow"
         Icon="/Assets/MemCalc.ico"
         KeyDown="KeyDownHandler"
+        TransparencyLevelHint="AcrylicBlur"
+        x:Class="MemCal.Views.MainWindow"        
         Title="MemCal"
 >
 
@@ -30,9 +31,16 @@
         VerticalAlignment="Stretch"
         Background="{StaticResource ResourceKey=OutputBgColour}">
 
+    <Button x:Name="ToggleHistoryOn"
+            Grid.Column="0"
+            Grid.Row="0"
+            Classes="BtnToggle"
+            i:Attached.Icon="fa-solid fa-toggle-on"
+    />
+
     <Label x:Name="ExpressionOutput"
-           Grid.Column="0"
-           Grid.ColumnSpan="4"
+           Grid.Column="1"
+           Grid.ColumnSpan="3"
            Grid.Row="0"
            Content="{Binding Expression}"
            Classes="LabelBase" />
@@ -47,7 +55,7 @@
     <Button x:Name="ActionClearButton"
             Grid.Column="0"
             Grid.Row="2"
-            Command="{Binding ActionClearCommand}"      
+            Command="{Binding ActionClearCommand}"
             Classes="BtnBase BtnAction"
             Content="AC" />
 
@@ -249,5 +257,38 @@
             Command="{Binding CalculateCommand}"
             Classes="BtnBase BtnOperator BtnIcon"
             i:Attached.Icon="fa-solid fa-equals" />
+
+    <Grid x:Name="CalculationHistory"
+          IsVisible="False"
+          Grid.Column="0"
+          Grid.ColumnSpan="4"
+          Grid.Row="0"
+          Grid.RowSpan="2"
+          ColumnDefinitions="*,*,*,*"
+          RowDefinitions=".5*,1.5*"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          Background="{StaticResource ResourceKey=OutputBgColour}">
+      <ScrollViewer Grid.Column="0"
+                    Grid.ColumnSpan="4"
+                    Grid.Row="0"
+                    Grid.RowSpan="2">
+        <ItemsRepeater Background="{StaticResource ResourceKey=OutputBgColour}"
+                       Items="{Binding Calculations}">
+          <ItemsRepeater.ItemTemplate>
+            <DataTemplate>
+              <Label Content="{Binding}"
+                     Classes="LabelBase" />
+            </DataTemplate>
+          </ItemsRepeater.ItemTemplate>
+        </ItemsRepeater>
+      </ScrollViewer>
+
+      <Button x:Name="ToggleHistoryOff"
+              Grid.Column="0"
+              Grid.Row="0"
+              Classes="BtnToggle"
+              i:Attached.Icon="fa-solid fa-toggle-off" />
+    </Grid>
   </Grid>
 </Window>

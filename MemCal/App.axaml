@@ -46,6 +46,19 @@
       <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
 
+    <Style Selector="Button.BtnToggle">
+      <Setter Property="Background" Value="{StaticResource ResourceKey=OutputBgColour}" />
+      <Setter Property="Foreground" Value="{StaticResource ResourceKey=TextColour}" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="CornerRadius" Value="0" />
+      <Setter Property="FontFamily" Value="Helvetica,Arial" />
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="HorizontalContentAlignment" Value="Left" />
+      <Setter Property="VerticalAlignment" Value="Stretch" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
     <Style Selector="Button.BtnAction">
       <Setter Property="Background" Value="{StaticResource ResourceKey=BtnActionBgColour}" />
     </Style>
