@@ -2,10 +2,8 @@
 
 using org.mariuszgromada.math.mxparser;
 using ReactiveUI;
-using System;
 using System.Reactive;
-using System.Reactive.Linq;
-using MemCal.Models.DataTypes.Enums;
+using MemCal.DataTypes.Enums;
 
 /// <summary>
 /// The viewmodel for the main window.
@@ -41,9 +39,9 @@ public class MainWindowViewModel : ViewModelBase
         this.ActionNegateCommand = ReactiveCommand.Create(this.ActionNegate);
         this.CalculateCommand = ReactiveCommand.Create(this.Calculate);
         this.InputDecimalCommand = ReactiveCommand.Create(this.InputDecimal);
+        this.InputExponentCommand = ReactiveCommand.Create(this.InputExponent);
         this.InputNumberCommand = ReactiveCommand.Create<int>(this.InputNumber);
         this.InputOperatorCommand = ReactiveCommand.Create<Operation?>(this.InputOperator);
-        this.InputPercentCommand = ReactiveCommand.Create(this.InputPercent);
     }
 
 
@@ -87,6 +85,11 @@ public class MainWindowViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> InputDecimalCommand { get; }
 
     /// <summary>
+    /// Gets the percentage input command.
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> InputExponentCommand { get; }
+
+    /// <summary>
     /// Gets the number input command.
     /// </summary>
     public ReactiveCommand<int, Unit> InputNumberCommand { get; }
@@ -95,11 +98,6 @@ public class MainWindowViewModel : ViewModelBase
     /// Gets the operator command.
     /// </summary>
     public ReactiveCommand<Operation?, Unit> InputOperatorCommand { get; }
-
-    /// <summary>
-    /// Gets the percentage input command.
-    /// </summary>
-    public ReactiveCommand<Unit, Unit> InputPercentCommand { get; }
 
     /// <summary>
     /// Gets the last character in the expression.
@@ -221,7 +219,7 @@ public class MainWindowViewModel : ViewModelBase
             else if (this.CurrentNumber != 0)
             {
                 this.CommitNumber();
-                string prefix = operation == Operation.Percentage ? string.Empty : " ";
+                string prefix = operation == Operation.Exponent ? string.Empty : " ";
                 this.UpdateExpression($"{prefix}{(char)operation} ");
             }
         }
@@ -232,13 +230,9 @@ public class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Handles percentage input.
     /// </summary>
-    public void InputPercent()
+    public void InputExponent()
     {
-        if (this.CurrentNumber != 0)
-        {
-            this.UpdateExpression(this.CurrentNumber.ToString() + "%");
-        }
-
+        this.UpdateExpression(this.CurrentNumber.ToString() + "^");
         this.AfterCommit();
         this.PostInteraction();
     }
@@ -281,15 +275,12 @@ public class MainWindowViewModel : ViewModelBase
     {
         if (this.CurrentNumber != 0 || this.Expression != string.Empty)
         {
-            if (this.LastChar != '%')
+            if (this.Expression != string.Empty && this.LastChar != '^')
             {
-                if (this.Expression != string.Empty)
-                {
-                    this.UpdateExpression(" ");
-                }
-
-                this.UpdateExpression(this.CurrentNumber.ToString());
+                this.UpdateExpression(" ");
             }
+
+            this.UpdateExpression(this.CurrentNumber.ToString());
         }
 
         this.AfterCommit();

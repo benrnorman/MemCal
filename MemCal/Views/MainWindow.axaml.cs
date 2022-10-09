@@ -3,7 +3,7 @@ namespace MemCal.Views;
 using Avalonia.Controls;
 using Avalonia.Input;
 using MemCal.ViewModels;
-using MemCal.Models.DataTypes.Enums;
+using MemCal.DataTypes.Enums;
 using ReactiveUI;
 using System;
 using System.Reactive.Linq;
@@ -71,10 +71,10 @@ public partial class MainWindow : Window
                 case Key.NumPad4:
                     vm.InputNumber(4);
                     break;
+                case Key.D5:
                 case Key.NumPad5:
                     vm.InputNumber(5);
                     break;
-                case Key.D6:
                 case Key.NumPad6:
                     vm.InputNumber(6);
                     break;
@@ -94,10 +94,10 @@ public partial class MainWindow : Window
                 case Key.NumPad0:
                     vm.InputNumber(0);
                     break;
-                case Key.D5:
+                case Key.D6:
                     if (e.KeyModifiers == KeyModifiers.Shift)
                     {
-                        vm.InputPercent();
+                        vm.InputExponent();
                     }
                     else
                     {

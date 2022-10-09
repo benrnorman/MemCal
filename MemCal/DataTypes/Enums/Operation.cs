@@ -1,4 +1,4 @@
-﻿namespace MemCal.Models.DataTypes.Enums;
+﻿namespace MemCal.DataTypes.Enums;
 
 /// <summary>
 /// Represents a valid mathemitcal operator.
@@ -28,10 +28,5 @@ public enum Operation
     /// <summary>
     /// Operation returning the power of two numebrs.
     /// </summary>
-    Exponent = '^',
-
-    /// <summary>
-    /// Operation that returns the percentage of a number.
-    /// </summary>
-    Percentage = '%'
+    Exponent = '^'
 }

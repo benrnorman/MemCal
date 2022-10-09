@@ -8,11 +8,11 @@
 
   <Application.Resources>
     <SolidColorBrush x:Key="TextColour" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="BorderColour" Color="#525055" />
-    <SolidColorBrush x:Key="OutputBgColour" Color="#514F54" />
-    <SolidColorBrush x:Key="BtnActionBgColour" Color="#626065" />
-    <SolidColorBrush x:Key="BtnInputBgColour" Color="#7C7A7E" />
-    <SolidColorBrush x:Key="BtnOperatorBgColour" Color="#F2A33C" />
+    <SolidColorBrush x:Key="BorderColour" Color="#34312D" />
+    <SolidColorBrush x:Key="OutputBgColour" Color="#34312D" />
+    <SolidColorBrush x:Key="BtnActionBgColour" Color="#7353BA" />
+    <SolidColorBrush x:Key="BtnInputBgColour" Color="#777DA7" />
+    <SolidColorBrush x:Key="BtnOperatorBgColour" Color="#D5573B" />
   </Application.Resources>
   <Application.Styles>
     <FluentTheme Mode="Light"/>

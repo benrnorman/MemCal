@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:MemCal.ViewModels"
         xmlns:i="clr-namespace:Projektanker.Icons.Avalonia;assembly=Projektanker.Icons.Avalonia"
-        xmlns:o="using:MemCal.Models.DataTypes.Enums"
+        xmlns:o="using:MemCal.DataTypes.Enums"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -14,7 +14,7 @@
         Background="Transparent"
         TransparencyLevelHint="AcrylicBlur"
         x:Class="MemCal.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/MemCalc.ico"
         KeyDown="KeyDownHandler"
         Title="MemCal"
 >
@@ -58,12 +58,12 @@
             Classes="BtnBase BtnAction BtnIcon"
             i:Attached.Icon="fa-solid fa-plus-minus" />
 
-    <Button x:Name="ActionPercentButton"
+    <Button x:Name="ActionExponentButton"
             Grid.Column="2"
             Grid.Row="2"
-            Command="{Binding InputPercentCommand}"
+            Command="{Binding InputExponentCommand}"
             Classes="BtnBase BtnAction BtnIcon"
-            i:Attached.Icon="fa-solid fa-percent" />
+            i:Attached.Icon="fa-solid fa-superscript" />
 
     <Button x:Name="OperatorDivisionButton"
             Grid.Column="3"
