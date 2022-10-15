@@ -17,7 +17,7 @@
   <Application.Styles>
     <FluentTheme Mode="Light"/>
 
-    <Style Selector="Label.LabelBase">
+    <Style Selector="Label.LabelBase,Button.LabelBase">
       <Setter Property="Background" Value="{StaticResource ResourceKey=OutputBgColour}" />
       <Setter Property="Foreground" Value="{StaticResource ResourceKey=TextColour}" />
       <Setter Property="FontFamily" Value="Helvetica,Arial" />

@@ -2,7 +2,6 @@
 
 using org.mariuszgromada.math.mxparser;
 using ReactiveUI;
-using System.Collections.Generic;
 using System.Reactive;
 using MemCal.DataTypes.Enums;
 using MemCal.Models;
@@ -41,6 +40,7 @@ public class MainWindowViewModel : ViewModelBase
         this.ActionClearCommand = ReactiveCommand.Create(this.ActionClear);
         this.ActionNegateCommand = ReactiveCommand.Create(this.ActionNegate);
         this.CalculateCommand = ReactiveCommand.Create(this.Calculate);
+        this.InputCalculationCommand = ReactiveCommand.Create<Calculation?>(this.InputCalculation);
         this.InputDecimalCommand = ReactiveCommand.Create(this.InputDecimal);
         this.InputExponentCommand = ReactiveCommand.Create(this.InputExponent);
         this.InputNumberCommand = ReactiveCommand.Create<int>(this.InputNumber);
@@ -86,6 +86,11 @@ public class MainWindowViewModel : ViewModelBase
         get => this.expression;
         set => this.RaiseAndSetIfChanged(ref this.expression, value);
     }
+
+    /// <summary>
+    /// Gets the calculation input command.
+    /// </summary>
+    public ReactiveCommand<Calculation?, Unit> InputCalculationCommand { get; }
 
     /// <summary>
     /// Gets the decimal input command.
@@ -179,6 +184,21 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Resolve the calculation input by inserting it into the current expression.
+    /// </summary>
+    /// <param name="calc">The calculation to add to the expression.</param>
+    public void InputCalculation(Calculation? calc)
+    {
+        System.Diagnostics.Debug.WriteLine("Fired!");
+        if (calc != null)
+        {
+            this.PreInput();
+            this.UpdateExpression($"({calc.ExpressionString})");
+            this.PostInteraction();
+        }
+    }
+
+    /// <summary>
     /// Resolve the decimal input by adding the decimal flag only if the
     /// current number is not already a decimal.
     /// </summary>
@@ -226,7 +246,7 @@ public class MainWindowViewModel : ViewModelBase
             {
                 this.negativeValueFlag = true;
             }
-            else if (this.CurrentNumber != 0)
+            else
             {
                 this.CommitNumber();
                 string prefix = operation == Operation.Exponent ? string.Empty : " ";
@@ -283,7 +303,7 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     private void CommitNumber()
     {
-        if (this.CurrentNumber != 0 || this.Expression != string.Empty)
+        if (this.CurrentNumber != 0 || (this.Expression != string.Empty && this.LastChar != ')'))
         {
             if (this.Expression != string.Empty && this.LastChar != '^')
             {

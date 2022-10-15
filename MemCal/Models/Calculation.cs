@@ -30,6 +30,14 @@ public class Calculation
     public Expression Expression { get; }
 
     /// <summary>
+    /// Gets the expression as a string.
+    /// </summary>
+    public string ExpressionString
+    {
+        get => this.Expression.getExpressionString();
+    }
+
+    /// <summary>
     /// Gets the result of the Calculation.
     /// </summary>
     public string Result
@@ -48,6 +56,6 @@ public class Calculation
     /// <returns>The expression and result.</returns>
     public override string ToString()
     {
-        return $"{this.Expression.getExpressionString()} = {this.Result}";
+        return $"{this.ExpressionString} = {this.Result}";
     }
 }
