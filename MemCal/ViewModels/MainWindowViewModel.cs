@@ -18,7 +18,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private bool decimalInputFlag = false;
 
-    private bool evaluted = false;
+    private bool evaluated = false;
 
     private string expression = string.Empty;
 
@@ -152,7 +152,7 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     public void Calculate()
     {
-        if (!this.evaluted)
+        if (!this.evaluated)
         {
             this.CommitNumber();
             if (this.Expression != string.Empty)
@@ -170,7 +170,7 @@ public class MainWindowViewModel : ViewModelBase
                     result = "NaN";
                 }
 
-                this.evaluted = true;
+                this.evaluated = true;
                 this.UpdateExpression(" =");
                 this.UpdateResult(result);
                 this.PostInteraction();
@@ -309,7 +309,7 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     private void PreInput()
     {
-        if (this.evaluted)
+        if (this.evaluated)
         {
             this.Reset();
         }
@@ -320,7 +320,7 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     private void Reset()
     {
-        this.evaluted = false;
+        this.evaluated = false;
         this.Expression = string.Empty;
         this.AfterCommit();
     }
