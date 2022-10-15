@@ -189,7 +189,6 @@ public class MainWindowViewModel : ViewModelBase
     /// <param name="calc">The calculation to add to the expression.</param>
     public void InputCalculation(Calculation? calc)
     {
-        System.Diagnostics.Debug.WriteLine("Fired!");
         if (calc != null)
         {
             this.PreInput();
