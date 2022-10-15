@@ -1,5 +1,5 @@
 # MemCal
-#### Video Demo: https://youtube.com
+#### Video Demo: https://www.youtube.com/watch?v=h786mmUOwtY
 #### GitHub Repo: https://github.com/benrnorman/MemCal
 #### Description:
 A simple cross-platform calculator.
