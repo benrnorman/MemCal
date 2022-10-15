@@ -27,8 +27,48 @@ they did track previous calculations, it was read-only. So, in this program I ai
 * Kept a history of calculations performed.
 * Allowed inserting historical calculations into the working expression.
 
+## Project structure
+### Assets
+Contains the only custom-made icon used in the project. All other icons are FontAwesome
+SVGs pulled in using a NuGet package.
+
+### DataTypes
+The DataTypes directory contains custom datatypes defined for this project.
+#### Enums
+Enumerated types that define a set of named values.
+* Operation.cs - the enum created for this project is the Operation enum, defining the
+specific operations allowed by this program and the character used to denote them. This was
+used for error-checking and to prevent anything malicious potentially being submitted.
+
+### Models
+The Models directory contains the definitions for the classes that make up the domain model.
+* Calculation.cs - the Calculation class is defined here. It represents a mathemtical
+expression and the result. The ToString method is overridden to print out a nicer representation
+of the full calculation, for display in the history log.
+
+### ViewModels
+The ViewModels used throughout the project represent and abstraction of the view that
+exposes certain properties and methods without having to worry about the specific implementation
+in the view.
+* ViewModelBase.cs - the ViewModelBase is view model that all other view models inherit. It
+sets up the reactivity for the models for the data-binding between the view and viewmodel.
+* MainWindowViewModel.cs - the MainWindowViewModel is the specific implementation of the view
+model for the main window. It intialises several commands to be sent to the view so that inputs
+can be bound and sent back to the view model. It tracks the working expression, the historical
+calculations, and various flags for determining the correct input.
+
+### Views
+The Views are the specific implementation of the GUI that a user can interact with. They
+consist of a XAML final definining the view, and a code-behind file that implements some
+view-specific operations.
+* MainWindow.axaml - the MainWindow XAML file that defines the layout of the GUI and binds
+certain UI elements to interactions the user can perform, or displaying output for the user.
+* MainWindow.axaml.cs - the MainWindow code-behind file, that defines some view-specific logic
+such as the history view toggle and handling the key inputs.
+
+## Reflections
 My main criticism of my own project and process was in retrospect I felt like I spent
-more time learning the GUI markup language and the Avalonia framework, rather than the
-"programming" side of things. It would have also been interesting to incorporate a
+more time learning the MVVM model, GUI markup language, and the Avalonia framework, rather
+than the "programming" side of things. It would have also been interesting to incorporate a
 persistence layer using EntityFramework and SQLite or similar, but I felt if I didn't
 finally just down tools and submit something I'd keep tinkering forever.
