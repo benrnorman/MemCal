@@ -6,7 +6,7 @@ using Avalonia.Controls.Templates;
 using MemCal.ViewModels;
 
 /// <summary>
-/// Utility class to locate the appropriate View for a  given ViewModel.
+/// Utility class to locate the appropriate View for a given ViewModel.
 /// </summary>
 public class ViewLocator : IDataTemplate
 {
